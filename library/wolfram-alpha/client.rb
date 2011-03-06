@@ -8,13 +8,13 @@ module WolframAlpha
       @app_id = app_id
     end
 
-    def query input
-      document = Nokogiri::XML File.read("/home/mk/response.xml")#WolframAlpha::RequestURI % [URI.escape(input), @app_id]
+    def compute query
+      document = Nokogiri::XML open WolframAlpha::RequestURI % [URI.escape(query), @app_id]#File.open("/home/mk/Documents/response.xml")
 
-      if document.root.name == 'queryresult'
+      if document.root.name == "queryresult"
         Response.new document
       else
-        raise ArgumentError, "<queryresult> is missing from the api response."
+        raise "Invalid response"
       end
     end
   end

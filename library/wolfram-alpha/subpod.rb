@@ -2,14 +2,14 @@
 
 module WolframAlpha
   class Subpod
-    def initialize element
-      @element = element
+    attr_accessor :pod
+
+    def initialize pod, element
+      @pod, @element = pod, element
     end
 
     def text
-      if element = @element.search('plaintext')[0]
-        element.text
-      end
+      @element.xpath("plaintext").text
     end
   end
 end

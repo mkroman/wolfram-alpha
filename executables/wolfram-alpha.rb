@@ -9,5 +9,4 @@ require 'wolfram-alpha'
 AppId = "52PPLR-44H379TTGL"
 
 client = WolframAlpha::Client.new AppId
-client
-p client.query("5 in roman numerals").pods[0].subpods[0].text
+p client.compute("the age of the universe").pods[1].subpods[0].text
