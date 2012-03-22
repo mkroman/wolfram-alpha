@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require 'cgi'
 require 'open-uri'
 require 'nokogiri'
 
@@ -8,10 +9,15 @@ require 'wolfram-alpha/client'
 require 'wolfram-alpha/subpod'
 require 'wolfram-alpha/response'
 
+# Wolfram|Alpha introduces a fundamentally new way to get knowledge and answers—
+# not by searching the web, but by doing dynamic computations based on a vast collection of
+# built-in data, algorithms, and methods.
+#
+# @author Mikkel Kroman
 module WolframAlpha
-  RequestURI = "http://api.wolframalpha.com/v2/query?input=%s&appid=%s"
+  # The current version of the WolframAlpha library.
+  Version = "0.2"
 
-  class << Version = [1,0]
-    def to_s; join '.' end
-  end
+  # The API request-uri.
+  RequestURI = "http://api.wolframalpha.com/v2/query?input=%s&appid=%s"
 end

@@ -1,0 +1,5 @@
+--output-dir documentation/
+--readme README.md
+--title Wolfram-Alpha
+--protected
+library/**/*.rb
