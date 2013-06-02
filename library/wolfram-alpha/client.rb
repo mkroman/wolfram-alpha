@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 module WolframAlpha
-  # Front object for communicating with the Wolfram|Alpha API.
   class Client
-    # The Wolfram|Alpha API developer key, which is set upon initialization.
-    attr_accessor :application_key
+    # The Wolfram|Alpha API application id, which is set upon initialization.
+    attr_accessor :token
 
     # The default options for a new client, it is merged with the options
     # set upon initialization.
@@ -14,23 +13,25 @@ module WolframAlpha
 
     # Initialize a new client to communicate with the Wolfram|Alpha API.
     #
-    # @param [String] application_key The developers API-key that can be easily
+    # @param [String] token The developers API-id that can be freely
     #   obtained from http://products.wolframalpha.com/api/
     # @param [Hash] options A set of options that may be put in the request.
     #
     # @see DefaultOptions
-    def initialize application_key = nil, options = {}
+    def initialize token, options = {}
+      @http = Net::HTTP.new RequestURI.host, RequestURI.port
+      @token = token or raise "Invalid token"
       @options = DefaultOptions.merge options
-      @application_key = application_key
     end
 
-    # Compute the value of user input, and return a new response.
+    # Compute the result of +input+, and return a new response.
     #
-    # @param [String] query The users input query.
+    # @param [String] input The input query.
     #
     # @return [Response] The parsed response object.
-    def compute query
-      document = Nokogiri::XML open request_url(query)
+    def query input
+      response = @http.get request_url(input)
+      document = Nokogiri::XML response.body
 
       if document.root.name == "queryresult"
         Response.new document
@@ -44,18 +45,15 @@ module WolframAlpha
     # Mash together the request url, this is where the request-uri is modified
     # according to the client options.
     #
-    # @param [String] query The users input query.
+    # @param [String] input The input query.
     #
     # @return [String] The complete, formatted uri.
-    def request_url query = nil
-      escaped_query = CGI.escape query
-      formatted_url = WolframAlpha::RequestURI % [escaped_query, @application_key]
+    def request_url input
+      query = { "appid" => @token, "input" => "#{input}" }.merge @options
 
-      if @options[:timeout]
-        formatted_url << "&timeout=#{@options[:timeout]}"
+      RequestURI.dup.tap do |this|
+        this.query = URI.encode_www_form query
       end
-
-      return formatted_url
     end
   end
 end

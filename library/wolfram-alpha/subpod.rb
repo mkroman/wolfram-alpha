@@ -1,25 +1,28 @@
 # encoding: utf-8
 
 module WolframAlpha
-  # A subpod is a container for a type of output, such as plain text,
-  # numbers, images, etc.
   class Subpod
-    # This is the pod that this subpod belongs to.
-    attr_accessor :pod
-
-    # Construct a new subpod.
-    def initialize pod, element
-      @pod, @element = pod, element
+    # Construct a new pod with an assigned element.
+    def initialize parent, element
+      @parent = parent
+      @element = element
     end
 
-    # Access an attribute on the subpod element.
-    def [] key
-      return @element[key]
+    # Returns whether the subpod contains a plaintext element.
+    def plaintext?
+      not plaintext.nil?
     end
 
-    # Get the contents of plaintext as plain text.
-    def text
-      @element.xpath("plaintext").text
+    # Returns the plaintext element as text.
+    #
+    # @return [String] the plain text.
+    def plaintext
+      @plaintext ||= @element.at_css("plaintext").text
+    end
+
+    # Inspect the subpod.
+    def inspect
+      %{#<#{self.class.name} plaintext: #{plaintext.inspect}>}
     end
   end
 end

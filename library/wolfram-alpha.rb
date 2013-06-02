@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'cgi'
-require 'open-uri'
+require 'net/http'
 require 'nokogiri'
 
 require 'wolfram-alpha/pod'
@@ -16,8 +16,8 @@ require 'wolfram-alpha/response'
 # @author Mikkel Kroman
 module WolframAlpha
   # The current version of the WolframAlpha library.
-  Version = "0.2"
+  Version = "0.3"
 
   # The API request-uri.
-  RequestURI = "http://api.wolframalpha.com/v2/query?input=%s&appid=%s"
+  RequestURI = URI "http://api.wolframalpha.com/v2/query"
 end

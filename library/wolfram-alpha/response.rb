@@ -3,45 +3,28 @@
 module WolframAlpha
   # This is a response object that wraps the response data in a
   # easily managable object.
-  #
-  # @see #input_as_text
-  # @see #result_as_text
   class Response
+    include Enumerable
     attr_reader :pods
 
     # Construct a new response for a +document+.
-    def initialize document = nil
-      @document = document
-
-      @pods = @document.xpath("//pod").map {|element| Pod.new element }
+    def initialize document
+      @pods = document.css("pod").map { |element| Pod.new element }
     end
 
-    # Return the pod containing the subpods which is of type +input+.
-    def input
-      find_pod_with_id "Input"
+    # Return the first occurence of a pod with the id of +id+.
+    def [] id
+      find { |pod| pod.id == id }
     end
 
-    # Map and join the input interpreted pod's subpods as a printable string.
-    def input_as_text
-      input.subpods.map(&:text).join ', '
-    end
+    # Calls the given block once for each element in self, passing that element as a parameter.
+    #
+    # An Enumerator is returned if no block is given.
+    def each
+      return @pods.to_enum unless block_given?
 
-    # Return the pod containing the subpods which is of type +result+.
-    def result
-      find_pod_with_id "Result"
-    end
-
-    # Map and join the result pod's subpods as a printable string.
-    def result_as_text
-      result.subpods.map(&:text).join ', '
-    end
-
-  private
-
-    # Find a pod of which id is +id+.
-    def find_pod_with_id id
-      @pods.find do |pod|
-        pod["id"] == id
+      @pods.each do |pod|
+        yield pod
       end
     end
   end
