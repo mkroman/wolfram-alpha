@@ -30,7 +30,7 @@ module WolframAlpha
     #
     # @return [Response] The parsed response object.
     def query input
-      response = @http.get request_url(input)
+      response = @http.get request_url(input).request_uri
       document = Nokogiri::XML response.body
 
       if document.root.name == "queryresult"
