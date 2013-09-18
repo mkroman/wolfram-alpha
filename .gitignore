@@ -1,3 +1,4 @@
 documentation/
 executables/
 .yardoc
+Gemfile.lock
