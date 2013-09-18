@@ -7,8 +7,8 @@ module WolframAlpha
 
     # The default options for a new client, it is merged with the options
     # set upon initialization.
-    DefaultOptions = {
-      timeout: 1
+    Options = {
+      timeout: 15
     }
 
     # Initialize a new client to communicate with the Wolfram|Alpha API.
@@ -21,7 +21,7 @@ module WolframAlpha
     def initialize token, options = {}
       @http = Net::HTTP.new RequestURI.host, RequestURI.port
       @token = token or raise "Invalid token"
-      @options = DefaultOptions.merge options
+      @options = Options.merge options
     end
 
     # Compute the result of +input+, and return a new response.
