@@ -16,7 +16,7 @@ require 'wolfram-alpha/response'
 # @author Mikkel Kroman
 module WolframAlpha
   # The current version of the WolframAlpha library.
-  Version = "0.3"
+  Version = "0.3.1"
 
   # The API request-uri.
   RequestURI = URI "http://api.wolframalpha.com/v2/query"
