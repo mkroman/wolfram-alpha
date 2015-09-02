@@ -2,6 +2,7 @@
 
 module WolframAlpha
   class Subpod
+    attr_reader :element
     # Construct a new pod with an assigned element.
     def initialize parent, element
       @parent = parent
@@ -18,6 +19,10 @@ module WolframAlpha
     # @return [String] the plain text.
     def plaintext
       @plaintext ||= @element.at_css("plaintext").text
+    end
+
+    def image
+      @image ||= @element.at_css("img")[:src]
     end
 
     # Inspect the subpod.
