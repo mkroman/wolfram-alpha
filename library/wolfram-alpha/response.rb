@@ -17,6 +17,16 @@ module WolframAlpha
       find { |pod| pod.id == id }
     end
 
+    def all_images
+      array = []
+      @pods.each do |pod|
+        pod.subpods.each do |subpod|
+          array << subpod.image
+        end
+      end
+      return array
+    end
+
     # Calls the given block once for each element in self, passing that element as a parameter.
     #
     # An Enumerator is returned if no block is given.
